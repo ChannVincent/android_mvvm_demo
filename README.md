@@ -6,7 +6,7 @@ Vous devez réaliser une application native Android affichant la liste des album
 
 ## Prérequis 
 
-- Le projet est à réaliser sur la plateforme Android (API minimum 15)
+- [ok] Le projet est à réaliser sur la plateforme Android (API minimum 15)
 - Vous devez implémenter un système de persistance des données afin que les données puissent être disponibles offline, même après redémarrage de l'application.
 - Vous êtes libre d'utiliser le langage et les librairies que vous voulez, mais vous devez expliquer vos choix
 - Votre code doit être versionné sur un dépôt Git librement consultable
@@ -18,3 +18,10 @@ Vous devez réaliser une application native Android affichant la liste des album
 - La gestion des changements de configuration
 - Les performances de l'application
 
+# Action plan 
+
+## Roadmap
+
+- LBC-01 : init project
+
+## Choix techniques
