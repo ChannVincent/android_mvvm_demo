@@ -1,4 +1,4 @@
-package chann.vincent.android_mvvm
+package chann.vincent.mvvm
 
 import org.junit.Test
 
