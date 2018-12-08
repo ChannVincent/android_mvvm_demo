@@ -23,5 +23,11 @@ Vous devez réaliser une application native Android affichant la liste des album
 ## Roadmap
 
 - LBC-01 : init project
+- LBC-02 : setup navigation
 
 ## Choix techniques
+
+**Navigation**
+Standard de navigation entre les différentes vues de l'application.
+Tout les workflow de navigation sont contenu dans le fichier "mobile_navigation.xml".
+cf. https://developer.android.com/topic/libraries/architecture/navigation/navigation-implementing
