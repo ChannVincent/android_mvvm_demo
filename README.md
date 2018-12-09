@@ -25,7 +25,8 @@ Vous devez réaliser une application native Android affichant la liste des album
 - LBC-01 : init project
 - LBC-02 : setup navigation
 - LBC-03 : data & http call
-- LBC-04 : data & persistence
+- LBC-04 : mvvm architecture
+- LBC-05 : ui : recyclerview & performance
 
 ## Choix techniques
 
@@ -38,6 +39,7 @@ Cette couche récupère la donnée et l'expose au ViewModel via des observeurs.
 - Le "ViewModel" est attaché au cycle de vie de son composant (fragment, activité) et est conservé après une rotation de l'écran. Ce qui évite par exemple de lancer 2 appels à votre API à cause d'une rotation d'écran.
 Son travail est d'observer la donnée fournit par le DataModel et de l'exposer à la vue via des observeurs.
 - La "View" (activité, fragment) observe les données exposées par le ViewModel et les affiche à l'écran
+cf. https://android.jlelse.eu/android-architecture-pattern-components-mvvm-livedata-viewmodel-lifecycle-544e84e85177
 
 **Navigation**
 

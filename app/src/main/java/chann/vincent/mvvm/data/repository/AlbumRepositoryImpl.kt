@@ -22,8 +22,8 @@ class AlbumRepositoryImpl(
     }
 
     override suspend fun getAlbumList(): LiveData<List<Album>> {
-        initAlbumListData()
         return withContext(Dispatchers.IO) {
+            initAlbumListData()
             return@withContext currentAlbumDao.getAlbumList()
         }
     }
