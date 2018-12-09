@@ -25,8 +25,19 @@ Vous devez réaliser une application native Android affichant la liste des album
 - LBC-01 : init project
 - LBC-02 : setup navigation
 - LBC-03 : data & http call
+- LBC-04 : data & persistence
 
 ## Choix techniques
+
+**Architecture MVVM**
+
+L'architecture MVVM (Model View ViewModel) est une architecture récemment mise en avant par Google avec l'avènement du "LiveData".
+- Le "LiveData" est un observeur qui est lié au cycle de vie des différents composants (activité, fragment, service) et notifie ses observeurs de tout changement sur l'élément de data qu'il observe.
+- Le "DataModel" gère la données venant d'un appel à une API ou d'une base de donnée ou autre. Il est le seul point d'entrée de la donnée et gère la "DataBase Logic".
+Cette couche récupère la donnée et l'expose au ViewModel via des observeurs.
+- Le "ViewModel" est attaché au cycle de vie de son composant (fragment, activité) et est conservé après une rotation de l'écran. Ce qui évite par exemple de lancer 2 appels à votre API à cause d'une rotation d'écran.
+Son travail est d'observer la donnée fournit par le DataModel et de l'exposer à la vue via des observeurs.
+- La "View" (activité, fragment) observe les données exposées par le ViewModel et les affiche à l'écran
 
 **Navigation**
 
@@ -47,3 +58,17 @@ Elles offrent de meilleures performances que des Threads ou autres AsyncTasks et
 
 Nouveau set de librairies support crées pour remplacer les anciennes librairies supports v4, v7, v13, ...
 Elles sont devenus le nouveau standard et recevrons toutes les nouvelles mise à jour de librairies support Android.
+
+**Room**
+
+Librairie qui facilite l'utilisation d'SQLLite en offrant :
+- check de l'implémentation à la compilation
+- fonctionne bien avec notre architecture basée sur le "LiveData"
+- moins de boilerplate code
+- test et implémentation simple
+cf. https://medium.com/mindorks/android-architecture-components-room-and-kotlin-f7b725c8d1d
+
+**Kodein**
+
+Librairie d' "injection de dépendence" pour Kotlin.
+cf. https://proandroiddev.com/dependency-injection-with-kotlin-kodein-koin-3d783745e48d

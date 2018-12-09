@@ -1,6 +1,6 @@
-package chann.vincent.mvvm.data
+package chann.vincent.mvvm.data.network
 
-import chann.vincent.mvvm.data.response.Album
+import chann.vincent.mvvm.data.db.entity.Album
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
 import kotlinx.coroutines.Deferred
 import okhttp3.OkHttpClient
@@ -16,9 +16,14 @@ interface LeBonCoinApiService {
     fun getAlbums(): Deferred<List<Album>>
 
     companion object {
-        operator fun invoke(): LeBonCoinApiService {
+        operator fun invoke(connectivityInterceptor: ConnectivityInterceptor)
+                : LeBonCoinApiService {
+            val okHttpClient = OkHttpClient.Builder()
+                .addInterceptor(connectivityInterceptor)
+                .build()
+
             return Retrofit.Builder()
-                .client(OkHttpClient.Builder().build())
+                .client(okHttpClient)
                 .baseUrl("https://img8.leboncoin.fr/")
                 .addCallAdapterFactory(CoroutineCallAdapterFactory())   // handle response with coroutine
                 .addConverterFactory(GsonConverterFactory.create())     // parse json with gson
