@@ -92,13 +92,17 @@ class AlbumListFragment : ScopedFragment(), KodeinAware, OnItemClickListener {
     }
 
     private fun populateAlbumList(albumList: List<Album>, currentSet: Int = 0) {
-        var count = 0
-        for (album in albumList) {
-            // take next set of album and add them to groupAdapter
-            if (count > maxLoadingItems * currentSet && count < maxLoadingItems * (currentSet + 1)) {
-                groupAdapter.add(CardItem(album.id, album.title, album.thumbnailUrl))
+        for ((index, album) in albumList.withIndex()) {
+
+            // take currentSet of album to add it to groupAdapter
+            if (index >= maxLoadingItems * currentSet && index < maxLoadingItems * (currentSet + 1)) {
+                context?.let {
+                    groupAdapter.add(CardItem(album.id,
+                        album.title,
+                        album.thumbnailUrl,
+                        it))
+                }
             }
-            count++
         }
     }
 }

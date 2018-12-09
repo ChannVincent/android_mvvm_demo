@@ -8,15 +8,17 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import org.threeten.bp.ZonedDateTime
 
 class AlbumRepositoryImpl(
     private val currentAlbumDao: AlbumDao,
     private val albumNetworkListDataSource: AlbumNetworkDataSource
 ) : AlbumRepository {
 
+    var lastFetchTime: ZonedDateTime? = null
+
     init {
         albumNetworkListDataSource.downloadedAlbumList.observeForever { newAlbumList ->
-            // persist
             persistFetchedAlbumList(newAlbumList)
         }
     }
@@ -37,10 +39,19 @@ class AlbumRepositoryImpl(
     }
 
     private suspend fun initAlbumListData() {
-        fetchCurrentAlbumList()
+        // fetch 1st launch of application and then wait at least 5 minutes before next fetch
+        if (lastFetchTime == null || lastFetchTime?.let { isFetchCurrentNeeded(it) } == true) {
+            fetchCurrentAlbumList()
+            lastFetchTime = ZonedDateTime.now()
+        }
     }
 
     private suspend fun fetchCurrentAlbumList() {
         albumNetworkListDataSource.fetchAlbumList()
+    }
+
+    private fun isFetchCurrentNeeded(lastFetchTime: ZonedDateTime): Boolean {
+        val fiveMinutesAgo = ZonedDateTime.now().minusMinutes(5)
+        return lastFetchTime.isBefore(fiveMinutesAgo)
     }
 }

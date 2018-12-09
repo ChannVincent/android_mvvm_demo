@@ -6,6 +6,7 @@ import chann.vincent.mvvm.data.network.*
 import chann.vincent.mvvm.data.repository.AlbumRepository
 import chann.vincent.mvvm.data.repository.AlbumRepositoryImpl
 import chann.vincent.mvvm.ui.album.AlbumListViewModelFactory
+import com.jakewharton.threetenabp.AndroidThreeTen
 import org.kodein.di.Kodein
 import org.kodein.di.KodeinAware
 import org.kodein.di.android.x.androidXModule
@@ -15,6 +16,7 @@ import org.kodein.di.generic.provider
 import org.kodein.di.generic.singleton
 
 class MainApplication: Application(), KodeinAware {
+
     override val kodein = Kodein.lazy {
         import(androidXModule(this@MainApplication))
 
@@ -26,5 +28,10 @@ class MainApplication: Application(), KodeinAware {
         bind<AlbumNetworkDataSource>() with singleton { AlbumNetworkDataSourceImpl(instance()) }
         bind<AlbumRepository>() with singleton { AlbumRepositoryImpl(instance(), instance()) }
         bind() from provider { AlbumListViewModelFactory(instance()) }
+    }
+
+    override fun onCreate() {
+        super.onCreate()
+        AndroidThreeTen.init(this)
     }
 }
