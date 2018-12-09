@@ -6,7 +6,7 @@ Vous devez réaliser une application native Android affichant la liste des album
 
 ## Prérequis 
 
-- [ok] Le projet est à réaliser sur la plateforme Android (API minimum 15)
+- Le projet est à réaliser sur la plateforme Android (API minimum 15)
 - Vous devez implémenter un système de persistance des données afin que les données puissent être disponibles offline, même après redémarrage de l'application.
 - Vous êtes libre d'utiliser le langage et les librairies que vous voulez, mais vous devez expliquer vos choix
 - Votre code doit être versionné sur un dépôt Git librement consultable
@@ -36,8 +36,7 @@ L'architecture MVVM (Model View ViewModel) est une architecture récemment mise 
 - Le "LiveData" est un observeur qui est lié au cycle de vie des différents composants (activité, fragment, service) et notifie ses observeurs de tout changement sur l'élément de data qu'il observe.
 - Le "DataModel" gère la données venant d'un appel à une API ou d'une base de donnée ou autre. Il est le seul point d'entrée de la donnée et gère la "DataBase Logic".
 Cette couche récupère la donnée et l'expose au ViewModel via des observeurs.
-- Le "ViewModel" est attaché au cycle de vie de son composant (fragment, activité) et est conservé après une rotation de l'écran. Ce qui évite par exemple de lancer 2 appels à votre API à cause d'une rotation d'écran.
-Son travail est d'observer la donnée fournit par le DataModel et de l'exposer à la vue via des observeurs.
+- Le "ViewModel" son travail est d'observer la donnée fournit par le DataModel et de l'exposer à la vue via des observeurs.
 - La "View" (activité, fragment) observe les données exposées par le ViewModel et les affiche à l'écran
 cf. https://android.jlelse.eu/android-architecture-pattern-components-mvvm-livedata-viewmodel-lifecycle-544e84e85177
 
@@ -74,3 +73,25 @@ cf. https://medium.com/mindorks/android-architecture-components-room-and-kotlin-
 
 Librairie d' "injection de dépendence" pour Kotlin.
 cf. https://proandroiddev.com/dependency-injection-with-kotlin-kodein-koin-3d783745e48d
+
+## Problématiques
+
+**Persistance**
+
+Utilisation d'une base de données SQLlite simplifié par la couche d'abstraction de la librairie Room (cité plus haut).
+
+**Changements de configuration**
+
+Le "ViewModel" est attaché au cycle de vie de son composant (fragment, activité) et est conservé après une rotation de l'écran. Ce qui évite par exemple de lancer 2 appels à votre API à cause d'une rotation d'écran.
+
+**Performance de l'application**
+
+Problématique autour des 5000 items à charger dans la liste :
+- au premier lancement, charger 5000 éléments dans une liste entraîne des ralentissements.
+J'ai donc mis en place un "InfiniteScroll" qui charge les 50 premiers éléments, et s'occupe de charger les 50 éléments suivants lorsque l'on s'approche du dernier élément.
+- le "recyclerview" est le widget de liste par défaut d'Android.
+Il s'occupe de n'instancier que les items visible à l'écran et "recycle" les vues qui disparraissent de l'écran et les ré-utilisent pour les nouvelles vues qui s'affichent à l'écran.
+- du point de vue expérience utilisateur, au premier lancement l'application essaiera toujours de récupérer la liste. Si l'on change de page et que l'on revient dans les 5 minutes qui suivent nous ne récupérons pas la liste d'éléments du serveur.
+Cela évite de recharger la page à chaque changement de page alors que la liste d'éléments semble assez statique.
+- en cas de problème réseau : au premier lancement le chargement est infini.
+Si un premier appel réseau avait déjà été réussi auparavant, la liste se charge à partir de cette dernière liste récupérée.

@@ -3,7 +3,7 @@ package chann.vincent.mvvm.ui.album
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
-abstract class InfiniteScrollListener(private var linearLayoutManager: LinearLayoutManager?) :
+abstract class InfiniteScrollListener(private var linearLayoutManager: LinearLayoutManager) :
     RecyclerView.OnScrollListener() {
 
     private var previousTotal = 0 // The total number of items in the dataset after the last load
@@ -22,8 +22,8 @@ abstract class InfiniteScrollListener(private var linearLayoutManager: LinearLay
     override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
         super.onScrolled(recyclerView, dx, dy)
         visibleItemCount = recyclerView.childCount
-        totalItemCount = linearLayoutManager!!.itemCount
-        firstVisibleItem = linearLayoutManager!!.findFirstVisibleItemPosition()
+        totalItemCount = linearLayoutManager.itemCount
+        firstVisibleItem = linearLayoutManager.findFirstVisibleItemPosition()
 
         if (loading) {
             if (totalItemCount > previousTotal || totalItemCount == 0) {
